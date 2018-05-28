@@ -56,6 +56,24 @@ VehicleLeavesTrafficEventHandler, TeleportationArrivalEventHandler{
 //		this.vehicleId2TripDistance.remove(event.getVehicleId());
 	}
 	
+	public void getNumberOfTrips() {
+		
+		Map<String, List<Double>> distanceBinsToTrips = new HashMap<>();
+		
+		for (Double d : this.tripDistance) {
+		
+			if (d < 1000.) {
+				List<Double> tripsSoFar = distanceBinsToTrips.get("0-1km");
+				tripsSoFar.add(d);
+				distanceBinsToTrips.put("0-1km", tripsSoFar);
+			} else if (d < 3000.) {
+				
+			}
+			
+			
+		}
+	}
+	
 	public double getTotalDistance() {
 		double sum = 0.;
 		for (double dist :this.tripDistance) {
