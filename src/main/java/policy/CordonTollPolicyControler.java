@@ -17,16 +17,9 @@ import org.opengis.feature.simple.SimpleFeature;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
-/**
- * 
- * Set maximum speed of all links inside Essen to 30 kph.
- * 
- * @author amit
- */
-public class PolicyControler {
+public class CordonTollPolicyControler {
 	
-	
-	public static void main(String[] args) {
+public static void main(String[] args) {
 		
 		String configFile = "/Users/amit/Documents/matsimClass/ue_05June/data2/run255.output_config.xml";
 		
@@ -37,34 +30,30 @@ public class PolicyControler {
 		
 		config.controler().setFirstIteration(300);
 		config.controler().setLastIteration(310);
-		config.controler().setOutputDirectory("output_policy");
+		config.controler().setOutputDirectory("output_cordonToll");
 		
 		config.controler().setOverwriteFileSetting(OverwriteFileSetting.overwriteExistingFiles);
 		
-		//don't copy
+		//let's use 'ride' as teleported mode --> need to set speed factor / speed
 		config.plansCalcRoute().getOrCreateModeRoutingParams("ride").setTeleportedModeFreespeedFactor(1.5);
-		// up to here
-		
 		
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 		
 		// 
-		String essen_shapeFile = "";
-		Collection<SimpleFeature> allFeatures = ShapeFileReader.getAllFeatures(essen_shapeFile);
-		
-		for( Link link : scenario.getNetwork().getLinks().values()) {
-			Point point = MGC.coord2Point(link.getCoord()); // Centroid of the link --> to a point geometry
-			for (SimpleFeature  sf : allFeatures) {
-				if (((Geometry)sf.getDefaultGeometry()).contains(point)) {
-					link.setFreespeed(30.0/3.6);
-					break;
-				}
-			}
-		}
+		String essen_shapeFile = ""; // --> Essen
 		
 		Controler controler = new Controler(scenario);
 		
-
+		controler.addOverridingModule(new AbstractModule() {
+			
+			@Override
+			public void install() {
+				CordonTollEventHandler instance = new CordonTollEventHandler(essen_shapeFile);
+				addEventHandlerBinding().toInstance(instance);
+			}
+		});
+		
+		
 		controler.run();
 		
 	}
