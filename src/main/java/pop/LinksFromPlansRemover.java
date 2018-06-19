@@ -47,11 +47,12 @@ public class LinksFromPlansRemover {
 							act.setLinkId(null);	
 						} else {
 							// if there is no coordinate assigned, set a coord to activity (e.g. centroid of the link, fromNode, toNode)
-							Id<Link> linkId = act.getLinkId();
-							// get coord on the link using linkId and network
-							Link link = scenario.getNetwork().getLinks().get(linkId);
-							act.setCoord(link.getCoord());
-							act.setLinkId(null);
+//							Id<Link> linkId = act.getLinkId();
+//							// get coord on the link using linkId and network
+//							Link link = scenario.getNetwork().getLinks().get(linkId);
+//							act.setCoord(link.getCoord());
+//							act.setLinkId(null);
+							throw new RuntimeException("Neither link nor coord is found for the activity");
 						}
 						
 					} else if (planElement instanceof Leg) {
