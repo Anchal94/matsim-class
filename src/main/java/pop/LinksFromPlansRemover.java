@@ -21,10 +21,12 @@ public class LinksFromPlansRemover {
 	public static void main(String[] args) {
 		
 		String inputPlansFile = "";
+		String inputNetworkFile = "";
 		String outputFile = "";
 		
 		Config config = ConfigUtils.createConfig();
 		config.plans().setInputFile(inputPlansFile);
+		config.network().setInputFile(inputNetworkFile);
 		
 		Scenario scenario = ScenarioUtils.loadScenario(config);
 		
@@ -40,13 +42,16 @@ public class LinksFromPlansRemover {
 						// remove link info from the activities however, check the coord
 					
 						Activity act = (Activity) planElement;
-						
+					
 						if (act.getCoord()!=null) {
 							act.setLinkId(null);	
 						} else {
 							// if there is no coordinate assigned, set a coord to activity (e.g. centroid of the link, fromNode, toNode)
 							Id<Link> linkId = act.getLinkId();
 							// get coord on the link using linkId and network
+							Link link = scenario.getNetwork().getLinks().get(linkId);
+							act.setCoord(link.getCoord());
+							act.setLinkId(null);
 						}
 						
 					} else if (planElement instanceof Leg) {
