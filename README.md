@@ -1,5 +1,4 @@
-# matsim-example-project
+# MATSim Tutorial example code 0.10.x
 
-A small example of how to use MATSim as a library.
-
-By default, this project uses the latest (pre-)release. In order to use a different version, edit `pom.xml`.
+This is example code as taught in the MATSim tutorial at TU Berlin. You can find the most up to date tutorial under
+https://matsim.org/docs/tutorials/general
